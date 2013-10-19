@@ -46,17 +46,17 @@
             <TextBlock Text="Message" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
         <StackPanel x:Name="MessageBox" Grid.Row="1">
-            <TextBox Foreground="AntiqueWhite" Background="Black" Text="Hello World" Height="auto" Width="auto"/>
+            <TextBox x:Name="helloBox" Foreground="AntiqueWhite" Background="Black" Text="Hello World" Height="auto" Width="auto"/>
             
 
         </StackPanel>
         <StackPanel x:Name="ButtonBox" Grid.Row="2">
-            <Button Content="Button"/>
+            <Button Content="Button" Click="Button_Click"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
+            <TextBox Name="toBox" HorizontalAlignment="Left" Height="72" Margin="0,86,0,0" TextWrapping="Wrap" Text="360-867-5309" VerticalAlignment="Top" Width="456"/>
         </Grid>
 
         <!--Uncomment to see an alignment grid to help ensure your controls are
