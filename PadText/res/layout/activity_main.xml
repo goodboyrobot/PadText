@@ -4,17 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/buttonSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="127dp"
-        android:layout_marginLeft="18dp"
-        android:onClick="sendText"
-        android:text="Send text" />
-
     <EditText
         android:id="@+id/editPhoneNum"
         android:layout_width="wrap_content"
@@ -37,5 +26,40 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/buttonSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="22dp"
+        android:onClick="sendText"
+        android:text="Send text" />
+
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonSend"
+        android:layout_alignBottom="@+id/buttonSend"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/buttonSend"
+        android:text="Encrypt Message"
+        android:onClick="doEncrypt"
+        
+        />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonSend"
+        android:layout_below="@+id/button1"
+        android:text="Decrypt Text"
+        android:onClick="doDecrypt"
+        
+         />
 
 </RelativeLayout>

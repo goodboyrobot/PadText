@@ -1,12 +1,18 @@
 package com.padtext;
 
+import java.util.Random;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -32,7 +38,33 @@ public class MainActivity extends Activity {
     	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
 
     	textManager.sendTextMessage(phoneNum.getText().toString(), "4063965236",msgContent.getText().toString(), null, null);
- 	
+    	
     	
     }
+    public void doEncrypt(View view)
+    {
+    	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
+    	String encrypted = OneTimePadEngine.EncryptString(msgContent.getText().toString(),OneTimePadEngine.testPad);
+    	
+    	
+		
+    	msgContent.setText(encrypted);
+
+    	
+    }
+    public void doDecrypt(View view)
+    {
+    	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
+    	String decrypted = OneTimePadEngine.DecryptString(msgContent.getText().toString(),OneTimePadEngine.testPad);
+    	
+    	
+		
+    	msgContent.setText(decrypted);
+
+    	
+    }
+   
+    	
+    
+    
 }
