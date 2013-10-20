@@ -37,7 +37,7 @@ namespace PadText.Library
                 Pad oldPad = pads.First();
                 ((List<Pad>)pads).RemoveAt(0);
 
-                Pad newPad = PadManagement.CreatePad(oldPad.PadItem);
+                Pad newPad = PadManagement.CreatePad(oldPad.PadItem, PadCrypt.dictionaryToChar);
 
                 ((List<Pad>)this.pads).Add(newPad);
 
@@ -53,6 +53,20 @@ namespace PadText.Library
             }
 
             return false;
+        }
+
+        public string Decode(string message)
+        {
+            Pad oldPad = pads.First();
+            ((List<Pad>)pads).RemoveAt(0);
+
+            Pad newPad = PadManagement.CreatePad(oldPad.PadItem, PadCrypt.dictionaryToChar);
+
+            ((List<Pad>)this.pads).Add(newPad);
+
+            ICrypt crypt = new PadCrypt(newPad.PadItem);
+
+            return crypt.DecryptString(message);
         }
 
         private Contact user = null;
@@ -78,6 +92,7 @@ namespace PadText.Library
         {
             return Central.central;
         }
+
         ~Central()
         {
 

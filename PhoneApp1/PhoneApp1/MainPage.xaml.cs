@@ -21,17 +21,12 @@ namespace PhoneApp1
             InitializeComponent();
             nfc.Listen();
             nfc.OnMessage += (string msg) =>
+            {
+                Dispatcher.BeginInvoke(() =>
                 {
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        helloBox.Text = msg.Length.ToString();
-                    });
-                };
-
-            // Create random numbers
-            RandomNumber rnd = new RandomNumber(1337);
-            helloBox.Text = rnd.Next(100).ToString() + ", " + rnd.Next(100).ToString() + ", " + rnd.Next(100).ToString() + ", ";
-
+                    helloBox.Text = msg.Length.ToString();
+                });
+            };
         }
 
 

@@ -53,11 +53,26 @@ namespace PadText.Library
 
         public string DecryptString(string message)
         {
-            return String.Empty;
+            char c;
+            String plain_text = "";
+            for (int i = 0; i < message.Length; i++)
+            {
+                //Get the char
+                c = message[i];
+                //preform the translation operation on the character
+                int index;
+                index = (dictionaryToInt[c] - dictionaryToInt[this.padString[i]]) % dictionaryToChar.Length;
+                if (index < 0)
+                    index += dictionaryToChar.Length;
+                c = dictionaryToChar[index];
+                //concatinate it back onto the encrypted string	
+                plain_text += c;
+            }
+            return plain_text;
         }
 
         private Dictionary<char, int> dictionaryToInt = new Dictionary<char, int>();
         private string padString = String.Empty;
-        private char[] dictionaryToChar = " @£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà~\\^".ToArray();
+        public static const char[] dictionaryToChar = " @£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà~\\^".ToArray();
     }
 }
