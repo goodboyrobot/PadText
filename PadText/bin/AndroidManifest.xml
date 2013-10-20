@@ -5,11 +5,12 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="16" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.NFC"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+		  		<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+		  		<category android:name="android.intent.category.DEFAULT"/>
+		  		<data android:mimeType="application/com.padtext" />
+			</intent-filter>
         </activity>
         <receiver android:name=".SmsReceiver" android:exported="true">
             <intent-filter android:priority="1000">

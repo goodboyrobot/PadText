@@ -28,6 +28,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	        		Toast.makeText(context, sms.getDisplayMessageBody(), Toast.LENGTH_LONG).show();
 	        		
 	        	}
+	        	
 
 	    		
 	    		
