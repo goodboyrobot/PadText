@@ -7,11 +7,15 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
 
 namespace PanApp
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        PhoneNumberChooserTask phoneNumberChooserTask;
+        PhoneNumberResult decodeNumber = null;
+        public bool hasNumber = false;
         // Constructor
         public MainPage()
         {
@@ -27,6 +31,58 @@ namespace PanApp
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
+            }
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+        }
+
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/NewMessagePage.xaml", UriKind.Relative));
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            phoneNumberChooserTask = new PhoneNumberChooserTask();
+            phoneNumberChooserTask.Completed += new EventHandler<PhoneNumberResult>(phoneNumberChooserTask_Completed);
+            phoneNumberChooserTask.Show();
+
+        }
+        private void phoneNumberChooserTask_Completed(object sender, PhoneNumberResult e)
+        {
+            if (e.TaskResult == TaskResult.OK)
+            {
+                MessageBox.Show("The phone number for " + e.DisplayName + " is " + e.PhoneNumber);
+            }
+        }
+
+        private void DecodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (decodeNumber == null) {
+                MessageBox.Show("Error: Must have a contact to decode");
+                return;
+            }
+
+                
+
+        }
+
+        private void ContactSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            phoneNumberChooserTask = new PhoneNumberChooserTask();
+            phoneNumberChooserTask.Completed += new EventHandler<PhoneNumberResult>(contactSelectTask_Completed);
+            phoneNumberChooserTask.Show();
+        }
+
+        private void contactSelectTask_Completed(object sender, PhoneNumberResult e)
+        {
+            if (e.TaskResult == TaskResult.OK)
+            {
+                MessageBox.Show("The phone number for " + e.DisplayName + " is " + e.PhoneNumber);
+                decodeNumber = e;
             }
         }
     }
