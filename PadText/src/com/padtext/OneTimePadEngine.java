@@ -76,6 +76,8 @@ public class OneTimePadEngine {
 	//Generates this initial pad, this pad is shared between the user and the target
 	public static String generateInitialPad()
 	{
+		return testPad;
+		/*
 		String pad = "";
 		//seed the random number generator here
 		Random generator = new Random(1337);
@@ -85,6 +87,7 @@ public class OneTimePadEngine {
 			
 		}
 		return pad;
+		*/
 	}
 	
 	//generates the next pad in the chain from the previous pad

@@ -10,6 +10,7 @@ import android.widget.Toast;
 public class SmsReceiver extends BroadcastReceiver {
 	 public void onReceive(Context context, Intent intent)
 	    {
+	        //setContentView(R.layout.activity_main);
 	    	Bundle extras = intent.getExtras();
 	    	
 	    	//String message = "";

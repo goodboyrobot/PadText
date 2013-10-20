@@ -1,5 +1,7 @@
 package com.padtext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import android.nfc.*;
@@ -20,6 +22,7 @@ public class MainActivity extends Activity {
 	
 	SmsManager textManager;
 	NfcAdapter mNfcAdapter;
+	HashMap<Integer, ArrayList<String>> padmap;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        padmap = new HashMap<Integer,ArrayList<String>>();
     }
 
     @Override
@@ -44,11 +48,16 @@ public class MainActivity extends Activity {
     	textManager.sendTextMessage(phoneNum.getText().toString(), "4063965236",msgContent.getText().toString(), null, null);
     	
     	
+    	
     }
     public void doEncrypt(View view)
     {
+    	EditText phoneNum = (EditText) findViewById(R.id.editPhoneNum);
     	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
-    	String encrypted = OneTimePadEngine.EncryptString(msgContent.getText().toString(),OneTimePadEngine.testPad);
+    	ArrayList<String> the_pad_stack = padmap.get(Integer.getInteger((phoneNum.getText().toString())));
+    	String the_pad = the_pad_stack.get(0);
+    	
+    	String encrypted = OneTimePadEngine.EncryptString(msgContent.getText().toString(),the_pad);
     	
     	
 		
@@ -58,8 +67,12 @@ public class MainActivity extends Activity {
     }
     public void doDecrypt(View view)
     {
+    	EditText phoneNum = (EditText) findViewById(R.id.editPhoneNum);
+
     	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
-    	String decrypted = OneTimePadEngine.DecryptString(msgContent.getText().toString(),OneTimePadEngine.testPad);
+    	ArrayList<String> the_pad_stack = padmap.get(Integer.getInteger((phoneNum.getText().toString())));
+    	String the_pad = the_pad_stack.get(0);
+    	String decrypted = OneTimePadEngine.DecryptString(msgContent.getText().toString(),the_pad);
     	
     	
 		
@@ -95,7 +108,7 @@ public class MainActivity extends Activity {
     public void onResume() {
         super.onResume();
         // Check to see that the Activity started due to an Android Beam
-        String temp = getIntent().getAction();
+        //String temp = getIntent().getAction();
         
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             processIntent(getIntent());
@@ -109,18 +122,72 @@ public class MainActivity extends Activity {
         setIntent(intent);
     }
 
-    /**
-     * Parses the NDEF Message from the intent and prints to the TextView
-     */
+    
+     //Parses the NDEF Message from the intent and prints to the TextView
     void processIntent(Intent intent) {
-    	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
+    	//EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
                 NfcAdapter.EXTRA_NDEF_MESSAGES);
         // only one message sent during the beam
         NdefMessage msg = (NdefMessage) rawMsgs[0];
-        // record 0 contains the MIME type, record 1 is the AAR, if present
-        msgContent.setText(new String(msg.getRecords()[0].getPayload()));
+        //start creating pads off of the recieved initial one
+        GeneratePads(new String (msg.getRecords()[0].getPayload()));
+        //msgContent.setText(new String(msg.getRecords()[0].getPayload()));
+        
     }
+    
+    // generates the pads for the phone number specified
+    public void doGeneratePads(View view)
+    {
+    	EditText phoneNum = (EditText) findViewById(R.id.editPhoneNum);
+    	String initial = OneTimePadEngine.generateInitialPad();
+    	ArrayList<String> pads = new ArrayList<String>();
+    	// send the initial pad to the target
+    	NdefMessage msg = new NdefMessage(
+    			new NdefRecord[]
+    					{
+    					NdefRecord.createMime("application/com.padtext",initial.getBytes()),
+    					//NdefRecord.createMime("text/plain", "this is a demo pad".getBytes()),
+    					NdefRecord.createApplicationRecord("com.padtext")
+    					});
+    	mNfcAdapter.setNdefPushMessage(msg, this);
+    	//then generate the pad stack
+    	String last = OneTimePadEngine.generatePad(initial);
+    	pads.add(last);
+    	for (int i = 1; i<100;i++)
+    	{
+    		String next = OneTimePadEngine.generatePad(last);
+    		last = next;
+    		pads.add(next);
+    	}
+    	padmap.put((Integer.getInteger(phoneNum.getText().toString())), pads);
+    	
+    	
+    	
+    	
+    }
+    //generates the pads with a specified intial pad
+    public void GeneratePads(String initial)
+    {
+    	ArrayList<String> pads = new ArrayList<String>();
+    	EditText phoneNum = (EditText) findViewById(R.id.editPhoneNum);
+
+    	//then generate the pad stack
+    	String last = OneTimePadEngine.generatePad(initial);
+    	pads.add(last);
+    	for (int i = 1; i<100;i++)
+    	{
+    		String next = OneTimePadEngine.generatePad(last);
+    		last = next;
+    		pads.add(next);
+    	}
+    	padmap.put((Integer.getInteger(phoneNum.getText().toString())), pads);
+    	
+    	
+    	
+    	
+    }
+    
    
     	
     
