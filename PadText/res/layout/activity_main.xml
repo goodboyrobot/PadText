@@ -62,4 +62,14 @@
         
          />
 
+    <Button
+        android:id="@+id/buttonGenerate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:text="Generate new pad" 
+        android:onClick = "doRegenerate"
+        />
+
 </RelativeLayout>

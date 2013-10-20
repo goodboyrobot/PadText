@@ -63,6 +63,15 @@ public class MainActivity extends Activity {
 
     	
     }
+    public void doRegenerate(View view)
+    {
+    	EditText msgContent = (EditText) findViewById(R.id.editMessegeContents);
+    	String newpad = OneTimePadEngine.generatePad(msgContent.getText().toString());
+    	
+    	
+		
+    	msgContent.setText(newpad);
+    }
    
     	
     

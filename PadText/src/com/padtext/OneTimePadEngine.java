@@ -1,5 +1,7 @@
 package com.padtext;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.Random;
 import android.widget.Toast;
 
 public class OneTimePadEngine {
-	static char dictionaryToChar[] = " @£$¥0èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà".toCharArray();
+	static char dictionaryToChar[] = " @£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà~\\^".toCharArray();
 	static final Map<Character,Integer> dictionaryToInt;
 	public static String testPad = "9buU94WTlsl0TJ6tT1LM84527EmOkKpb8l8Wc4dPIJ3YfpFV7qyeE2GkYtLVJYJh9XPHUovEbCkZpqLNC6WJRBjBAO6uMyl6qK7uE17hMFi8MilZqjaKpf0sp51iA8T45HAmm6lIOsIn";
 	
@@ -69,7 +71,73 @@ public class OneTimePadEngine {
 			plain_text += c;
 		}
 		return plain_text;
+	}
+	
+	//Generates this initial pad, this pad is shared between the user and the target
+	public static String generateInitialPad()
+	{
+		String pad = "";
+		//seed the random number generator here
+		Random generator = new Random(1337);
+		for (int i = 0; i<140;i++)
+		{
+			pad+=dictionaryToChar[generator.nextInt(140)];
+			
+		}
+		return pad;
+	}
+	
+	//generates the next pad in the chain from the previous pad
+	public static String generatePad(String previousPad)
+	{
+		if (previousPad.length()!=140)
+		{
+			return "Invalid input";
+		}
+		byte[] bstrFront,bstrMiddle,bstrEnd;
+		String[] padParts = new String[3];
+		String newpad;
 		
+		//setting up the hasher
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-512");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		
+		// we have to split the previous pad into 3 parts in order create the new hash
+		padParts[0] = previousPad.substring(0, 64);
+		padParts[1] = previousPad.substring(64, 128);
+		padParts[2] = previousPad.substring(128);
+		// then convert them to bytes
+		bstrFront = previousPad.getBytes();
+		bstrMiddle = previousPad.getBytes();
+		bstrEnd = previousPad.getBytes();
+		//then hash them
+		bstrFront = md.digest(bstrFront);
+		bstrMiddle = md.digest(bstrMiddle);
+		bstrEnd = md.digest(bstrEnd);
+		//then convert them back to characters
+		padParts[0] = "";
+		padParts[1] = "";
+		padParts[2] = "";
+		for (int i = 0;i<64;i++)
+		{
+			padParts[0] += dictionaryToChar[(int)(char)bstrFront[i]%128];
+		}
+		for (int i = 0;i<64;i++)
+		{
+			padParts[1] += dictionaryToChar[(int)(char)bstrMiddle[i]%128];
+		}
+		for (int i = 0;i<12;i++)
+		{
+			padParts[2] += dictionaryToChar[(int)(char)bstrEnd[i]%128];
+		}
+		newpad = padParts[0] + padParts[1] + padParts[2];
+		
+		return newpad;	
 		
 	}
 
