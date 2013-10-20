@@ -21,16 +21,15 @@ namespace PhoneApp1
             InitializeComponent();
             nfc.Listen();
             nfc.OnMessage += (string msg) =>
+            {
+                Dispatcher.BeginInvoke(() =>
                 {
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        helloBox.Text = msg.Length.ToString();
-                    });
-                };
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
-            
+                    helloBox.Text = msg.Length.ToString();
+                });
+            };
         }
+
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -43,6 +42,14 @@ namespace PhoneApp1
         private void nfcBut_Click(object sender, RoutedEventArgs e)
         {
             nfc.Send(helloBox.Text);
+        }
+
+        private void encBut_Click(object sender, RoutedEventArgs e)
+        {
+            String testPad = "9buU94WTlsl0TJ6tT1LM84527EmOkKpb8l8Wc4dPIJ3YfpFV7qyeE2GkYtLVJYJh9XPHUovEbCkZpqLNC6WJRBjBAO6uMyl6qK7uE17hMFi8MilZqjaKpf0sp51iA8T45HAmm6lIOsIn";
+            
+            ICrypt crpto = new PadCrypt(testPad);
+            toBox.Text = crpto.EncryptString(helloBox.Text);
         }
 
         // Sample code for building a localized ApplicationBar

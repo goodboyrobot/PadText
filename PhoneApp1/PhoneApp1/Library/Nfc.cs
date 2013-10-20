@@ -43,7 +43,7 @@ namespace PadText.Library
 
         public void Send(string message)
         {
-            string bigstring = new String('c', 40000);
+            string bigstring = new String('c', 5000);
             device.PublishMessage("Windows.pad", bigstring);
 
         }
