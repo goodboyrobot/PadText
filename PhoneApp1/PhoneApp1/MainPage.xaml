@@ -50,14 +50,15 @@
 
 
         </StackPanel>
-        <StackPanel x:Name="ButtonBox" Grid.Row="2">
-            <Button Content="Txt Msg" Click="Button_Click"/>
-        </StackPanel>
+        <Grid x:Name="ButtonBox" Grid.Row="2" Margin="10,0,0,0">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Txt Msg" Click="Button_Click" Width="150"/>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="nfcButt" Content="NFC" Click="nfcBut_Click" Width="150" Height="72"/>
+        </Grid>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBox Name="toBox" HorizontalAlignment="Left" Height="72" Margin="0,86,0,0" TextWrapping="Wrap" Text="360-867-5309" VerticalAlignment="Top" Width="456"/>
-            <Button x:Name="nfcButt" Content="NFC" Click="nfcBut_Click" Margin="-12,372,-12,63"/>
+            <TextBox Name="toBox" HorizontalAlignment="Left" Height="277" Margin="0,86,0,0" TextWrapping="Wrap" Text="360-867-5309" VerticalAlignment="Top" Width="456"/>
+            <Button x:Name="nfcButt_Copy" Content="Encrypt" Click="encBut_Click" Margin="-13,400,-11,35"/>
         </Grid>
 
         <!--Uncomment to see an alignment grid to help ensure your controls are

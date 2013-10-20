@@ -93,7 +93,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Library\ContactPads.cs" />
     <Compile Include="Library\Nfc.cs" />
+    <Compile Include="Library\Crypt.cs" />
+    <Compile Include="Library\PadManagement.cs" />
+    <Compile Include="Library\RandomNumber.cs" />
     <Compile Include="Library\SmsSender.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
